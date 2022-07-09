@@ -1,4 +1,61 @@
+<!-----------カレンダープログラム--------------->
 <?php
+
+function getreservation(){
+    
+  $dsn="mysql:host=localhost;port=8889;dbname=reservation_calender;charset=utf8";
+  $user="root";
+  $pass="root";
+  try{
+  $db = new PDO($dsn,$user,$pass);
+  $ps = $db->query("SELECT * FROM reservation");
+  }catch (Exception $e) {
+    echo $e->getMessage() . PHP_EOL;
+  }
+  $reservation_member = array();
+  
+  foreach($ps as $out){
+      $day_out = strtotime((string) $out['day']);
+  
+      $member_out = (string) $out['member'];
+      
+      $reservation_member[date('Y-m-d', $day_out)] = $member_out;
+          
+  }
+      ksort($reservation_member);
+      return $reservation_member;
+}
+
+$reservation_array = getreservation();
+//getreservation関数を$reservation_arrayに代入しておく
+
+function reservation($date,$reservation_array){
+    //カレンダーの日付と予約された日付を照合する関数
+    
+    if(array_key_exists($date,$reservation_array)){
+        //もし"カレンダーの日付"と"予約された日"が一致すれば以下を実行する
+        
+        if($reservation_array[$date] >= 10){
+            //予約人数が１０人以上の場合は以下を実行する
+            
+        $reservation_member = "<br/>"."<span class='green'>"."予約できません"."</span>";
+        return $reservation_member;
+            
+    }
+        
+        else{
+            //予約人数が１０人より少なければ以下を実行する
+            
+           $reservation_member = "<br/>"."<span class='green'>".$reservation_array[$date]."人"."</span>";
+            //例：echo $reservation_member; → ３人
+            //色を変えるためにspanでclassをつけた
+            
+        return $reservation_member; 
+            
+        }
+    }
+}
+
 //タイムゾーンを設定
 date_default_timezone_set('Asia/Tokyo');
 
@@ -30,6 +87,7 @@ $html_title = date('Y年n月', $timestamp);//date(表示する内容,基準)
 $prev = date('Y-m', strtotime('-1 month', $timestamp));
 $next = date('Y-m', strtotime('+1 month', $timestamp));
 
+
 //該当月の日数を取得
 $day_count = date('t', $timestamp);
 
@@ -46,15 +104,38 @@ $week .= str_repeat('<td></td>', $youbi);
 
 for($day = 1; $day <= $day_count; $day++, $youbi++){
     
-    $date = $ym . '-' . $day; //2020-00-00
     
-    if($today == $date){
-        
-        $week .= '<td class="today">' . $day;//今日の場合はclassにtodayをつける
-    } else {
-        $week .= '<td>' . $day;
+    
+    
+    $date = $ym . '-' . $day; 
+    //それぞれの日付をY-m-d形式で表示例：2020-01-23
+    //$dayはfor関数のおかげで１日づつ増えていく
+    
+    //display_to_Holidays($date,$Holidays_array)の$dateに1/1~12/31の日付を入れる
+    //比較してあったらdisplay_to_Holidaysメソッドによって$Holidays_array[$date]つまり$holidaysがreturnされる
+    
+    
+    $reservation = reservation(date("Y-m-d",strtotime($date)),$reservation_array);
+
+    
+    
+    if($today == $date && strpos($reservation,'予約できません')){
+        //もしその日が今日なら
+        $week .= '<td class="today">'. $day . $reservation;//今日の場合はclassにtodayをつける
+    }elseif($today == $date){
+      //もしその日が今日なら
+      $week .= '<td class="today">'. "<a href='reservation_form.php?date={$date}'>" . $day . $reservation;//今日の場合はclassにtodayをつける
+    }elseif(strpos($reservation,'予約できません')){
+      $week .= '<td>' . $day . $reservation;
+    }elseif(reservation(date("Y-m-d",strtotime($date)),$reservation_array)){
+        $week .= '<td>'. "<a href='reservation_form.php?date={$date}'>"  . $day . $reservation;
+    }else{
+        //上２つ以外なら
+        $week .= '<td>'. "<a href='reservation_form.php?date={$date}'>"  . $day;
     }
-    $week .= '</td>';
+    $week .= '</a>' . '</td>';
+    
+    
     
     if($youbi % 7 == 6 || $day == $day_count){//週終わり、月終わりの場合
         //%は余りを求める、||はまたは
@@ -69,8 +150,11 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
         $week = '';//weekをリセット
     }
 }
+
     
 ?>
+<!-----------カレンダープログラム--------------->
+
 
 
 
@@ -83,7 +167,7 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
     <style>
       .container {
-        font-family: 'Noto Sans', sans-serif;　/*--GoogleFontsを使用--*/
+        font-family: 'Noto Sans', sans-serif;
           margin-top: 80px;
       }
         h3 {
@@ -95,20 +179,38 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
         }
         td {
             height: 100px;
+            width: 100px;
         }
         .today {
-            background: orange;　/*--日付が今日の場合は背景オレンジ--*/
+            background: orange;
         }
-        th:nth-of-type(1), td:nth-of-type(1) {　/*--日曜日は赤--*/
+        th:nth-of-type(1), td:nth-of-type(1) {
             color: red;
         }
-        th:nth-of-type(7), td:nth-of-type(7) {　/*--土曜日は青--*/
+        th:nth-of-type(7), td:nth-of-type(7) {
             color: blue;
         }
+        .holiday{
+            color: red;
+        }
+        .green{
+            color: green;
+        }
+        a:hover {
+          text-decoration: none;
+        }
+        table td a{
+            color : inherit;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            height: 100%;
+        } 
     </style>
 </head>
-<body>
-    <div class="container">
+
+<body id="">
+        <div class="container">
         <h3><a href="?ym=<?php echo $prev; ?>">&lt;</a><?php echo $html_title; ?><a href="?ym=<?php echo $next; ?>">&gt;</a></h3>
         <table class="table table-bordered">
             <tr>
@@ -120,12 +222,14 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
                 <th>金</th>
                 <th>土</th>
             </tr>
-             <?php
+            <?php
                 foreach ($weeks as $week) {
                     echo $week;
                 }
             ?>
         </table>
     </div>
+
+    
 </body>
 </html>

@@ -44,7 +44,7 @@ $db->query("INSERT INTO reservation (name,number,member,day)
   <div><input name="member"></div>
   日付
   <div>
-    <input type="date" name="day" list="daylist" min="">
+    <input type="date" name="day" list="daylist" value="<?php echo date("Y-m-d",strtotime($_REQUEST['date'])) ?>">
   </div>
   <div class="submit">
       <input type="submit" value="送信">
