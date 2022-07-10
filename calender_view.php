@@ -61,26 +61,28 @@ date_default_timezone_set('Asia/Tokyo');
 
 //前月・次月リンクが選択された場合は、GETパラメーターから年月を取得
 if(isset($_GET['ym'])){ 
-    $ym = $_GET['ym'];
+    $ym = date("Y-m",strtotime($_GET['ym']));
+    $timestamp = strtotime($_GET['ym']);
 }else{
     //今月の年月を表示
     $ym = date('Y-m');
+    //タイムスタンプ（どの時刻を基準にするか）を作成し、フォーマットをチェックする
+    //strtotime('Y-m-01')
+    $timestamp = strtotime($ym . '-01'); 
+    if($timestamp === false){//エラー対策として形式チェックを追加
+        //falseが返ってきた時は、現在の年月・タイムスタンプを取得
+        $ym = date('Y-m');
+        $timestamp = strtotime($ym . '-01');
+    }
 }
 
-//タイムスタンプ（どの時刻を基準にするか）を作成し、フォーマットをチェックする
-//strtotime('Y-m-01')
-$timestamp = strtotime($ym . '-01'); 
-if($timestamp === false){//エラー対策として形式チェックを追加
-    //falseが返ってきた時は、現在の年月・タイムスタンプを取得
-    $ym = date('Y-m');
-    $timestamp = strtotime($ym . '-01');
-}
+
 
 //今月の日付　フォーマット　例）2020-10-2
-$today = date('Y-m-j');
+$today = date('Y-m-d');
 
 //カレンダーのタイトルを作成　例）2020年10月
-$html_title = date('Y-m', $timestamp);//date(表示する内容,基準)
+$html_title = date('Y-m-d', $timestamp);//date(表示する内容,基準)
 
 //前月・次月の年月を取得
 //strtotime(,基準)
@@ -108,6 +110,7 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
     
     
     $date = $ym . '-' . $day; 
+    $ymd = date('Y-m-d', strtotime($date));
     //それぞれの日付をY-m-d形式で表示例：2020-01-23
     //$dayはfor関数のおかげで１日づつ増えていく
     
@@ -124,14 +127,14 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
         $week .= '<td class="today">'. $day . $reservation;//今日の場合はclassにtodayをつける
     }elseif($today == $date){
       //もしその日が今日なら
-      $week .= '<td class="today">'. "<a href='reservation_form.php?date={$date}'>" . $day . $reservation;//今日の場合はclassにtodayをつける
+      $week .= '<td class="today">'. "<a href='?ym={$ymd}'>" . $day . $reservation;//今日の場合はclassにtodayをつける
     }elseif(strpos($reservation,'予約できません')){
       $week .= '<td>' . $day . $reservation;
     }elseif(reservation(date("Y-m-d",strtotime($date)),$reservation_array)){
-        $week .= '<td>'. "<a href='reservation_form.php?date={$date}'>"  . $day . $reservation;
+        $week .= '<td>'. "<a href='?ym={$ymd}'>"  . $day . $reservation;
     }else{
         //上２つ以外なら
-        $week .= '<td>'. "<a href='reservation_form.php?date={$date}'>"  . $day;
+        $week .= '<td>'. "<a href='?ym={$ymd}'>"  . $day;
     }
     $week .= '</a>' . '</td>';
     
@@ -263,7 +266,7 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
           align-items: center;
           justify-content:center;
         }
-        .foot{
+        .footer{
           margin-bottom: 40px;
         }
         .icon-left{
@@ -334,6 +337,9 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
           width:100%;
           text-align: right;
         }
+        .foot{
+          height:111px;
+        }
     </style>
 </head>
 
@@ -346,11 +352,9 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
               <i class="fas fa-arrow-alt-circle-left fa-2x"></i>
             </a>
           </div>
-        <form>
           <label>
-            <input type="month" value="<?php echo date("Y-m",strtotime($html_title)) ?>" />
+            <input type="month" id="month" value="<?php echo date("Y-m",strtotime($html_title)) ?>" />
           </label>
-        </form>
           <div class="icon-right">
             <a href="?ym=<?php echo $next; ?>">
               <i class="fas fa-arrow-alt-circle-right fa-2x"></i>
@@ -374,15 +378,16 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
             ?>
         </table>
     </div>
-
-    <div class="container foot">
+    
+    <?php if(isset($_REQUEST['ym']) && preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $_REQUEST['ym'])):?>
+    <div class="container footer">
       <div class="card-list">
         <div class="card-list-item">
           <div class="card card-skin">
             <div class="card__textbox border">
-            <div class="card__titletext">15:00〜15:30</div>
+            <div class="card__titletext"><?php echo date("Y-m-d",strtotime($html_title)) ?>　15:00〜15:30</div>
             </div>
-            <div class="card__textbox input">
+            <div class="card__textbox input foot">
               <div class="card__titletext">
                 受講者：<span><input type="text"></span>
               </div>
@@ -396,9 +401,9 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
         <div class="card-list-item">
           <div class="card card-skin">
             <div class="card__textbox border">
-            <div class="card__titletext">15:30〜16:00</div>
+            <div class="card__titletext"><?php echo date("Y-m-d",strtotime($html_title)) ?>　15:30〜16:00</div>
             </div>
-            <div class="card__textbox">
+            <div class="card__textbox foot">
               <div class="card__titletext">
                 受講者：
                 <span></span>
@@ -411,7 +416,25 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
         </div>
       </div>
     </div>
+    <?php endif;?>
 
     
 </body>
+  <script type="text/javascript">
+    let url = new URL(window.location.href);
+    let params = url.searchParams;
+
+    function redirectValue() {
+      let month = document.getElementById('month');
+      location.href = "?ym=" + month.value;
+    }
+
+    let month = document.getElementById('month');
+
+    if(params.get('month')){
+      month.value = params.get('month');
+    }
+
+    month.addEventListener('change', redirectValue);
+    </script>
 </html>
