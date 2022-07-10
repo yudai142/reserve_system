@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: localhost:8889
--- 生成日時: 2022 年 7 月 10 日 10:03
+-- 生成日時: 2022 年 7 月 10 日 13:21
 -- サーバのバージョン： 5.7.26
 -- PHP のバージョン: 7.4.2
 
@@ -34,6 +34,29 @@ CREATE TABLE `reservation` (
   `day` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `created` datetime NOT NULL,
+  `modfied` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `created`, `modfied`) VALUES
+(3, 'テスト', 't@t.com', 'aaaaaaaa', '2021-06-05 12:05:07', '2022-07-10 12:41:05'),
+(4, 'テスト2', 'p@p.com', 'b480c074d6b75947c02681f31c90c668c46bf6b8', '2021-06-05 12:06:46', '2021-06-05 03:06:46');
+
 --
 -- ダンプしたテーブルのインデックス
 --
@@ -45,6 +68,12 @@ ALTER TABLE `reservation`
   ADD PRIMARY KEY (`id`);
 
 --
+-- テーブルのインデックス `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- ダンプしたテーブルのAUTO_INCREMENT
 --
 
@@ -53,6 +82,12 @@ ALTER TABLE `reservation`
 --
 ALTER TABLE `reservation`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- テーブルのAUTO_INCREMENT `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

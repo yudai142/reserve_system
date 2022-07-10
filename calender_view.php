@@ -1,5 +1,16 @@
 <!-----------カレンダープログラム--------------->
 <?php
+session_start();
+require('dbconnect.php'); 
+
+// ログイン中であるかの判定と、ログインユーザーIDがSQLに保存されているかの照合処理
+if(isset($_SESSION["id"]) && $_SESSION["time"] + 3600 > time()){
+  $_SESSION["time"] = time();
+  $members = $db->prepare("SELECT * FROM users WHERE id=?");
+  $members->execute(array($_SESSION["id"]));
+  $member = $members->fetch();
+}
+
 
 function getreservation(){
     
@@ -129,7 +140,7 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
       //もしその日が今日なら
       $week .= '<td class="today">'. "<a href='?ym={$ymd}'>" . $day . $reservation;//今日の場合はclassにtodayをつける
     }elseif(strpos($reservation,'予約できません')){
-      $week .= '<td>' . $day . $reservation;
+      $week .= '<td>' . "<a href='?ym={$ymd}'>" . $day . $reservation;
     }elseif(reservation(date("Y-m-d",strtotime($date)),$reservation_array)){
         $week .= '<td>'. "<a href='?ym={$ymd}'>"  . $day . $reservation;
     }else{
@@ -170,182 +181,14 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans" rel="stylesheet">
     <link rel ="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"></script>
+    <link rel="stylesheet" href="style.css">
     <style>
-      .container {
-        font-family: 'Noto Sans', sans-serif;
-          margin-top: 40px;
-      }
-        h3 {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        th {
-            height: 30px;
-            text-align: center;
-        }
-        td {
-            height: 100px;
-            width: 100px;
-        }
-        .today {
-            background: orange;
-        }
-        th:nth-of-type(1), td:nth-of-type(1) {
-            color: red;
-        }
-        th:nth-of-type(7), td:nth-of-type(7) {
-            color: blue;
-        }
-        .holiday{
-            color: red;
-        }
-        .green{
-            color: green;
-        }
-        a:hover {
-          text-decoration: none;
-        }
-        table td a{
-            color : inherit;
-            text-decoration: none;
-            display: block;
-            width: 100%;
-            height: 100%;
-        } 
-        label {
-          position: relative;
-          width: 192px;
-        }
-        input[type="month"] {
-          padding: 0 10px;
-          width: 147px;
-          height: 36px;
-          border: 0;
-          background: transparent;
-          box-sizing: border-box;
-          font-size: 23px;
-        }
-        input[type="month"]:focus {
-          outline: 0;
-        }
-        label::before {
-          position: absolute;
-          content: "";
-          top: 0;
-          right: 10px;
-          width: 36px;
-          height: 36px;
-          background-color: #06c;
-          background-image: url("icon_calendar.png");
-          background-repeat:  no-repeat;                         /* 画像の繰り返しを指定  */              
-          background-position:center center;                     /* 画像の表示位置を指定  */
-          background-size:contain;                               /* 画像のサイズを指定    */
-          border-radius: 10px;
-        }
-        input[type="month"]::-webkit-inner-spin-button{
-          -webkit-appearance: none;
-        }
-        input[type="month"]::-webkit-clear-button{
-          -webkit-appearance: none;
-        }
-        input[type="month"]::-webkit-calendar-picker-indicator{
-          position: absolute;
-          right: 10px;
-          top: 0px;
-          padding: 0;
-          width: 36px;
-          height: 36px;
-          /* background: rgba(255, 0, 0, 0.5); // 一旦背景色を付けて、見やすくします */
-          background: transparent;
-          color: transparent;
-          cursor: pointer;
-        }
-        .date-form{
-          display: flex;
-          flex-wrap: nowrap;
-          align-items: center;
-          justify-content:center;
-        }
-        .footer{
-          margin-bottom: 40px;
-        }
-        .icon-left{
-          margin-right: 30px;
-        }
-        .icon-left a{
-          color: #06c;
-        }
-        .icon-left a:hover{
-          color: #337ab7;
-        }
-        .icon-right{
-          margin-left: 30px;
-        }
-        .icon-right a{
-          color: #06c;
-        }
-        .icon-right a:hover{
-          color: #337ab7;
-        }
-        .card{
-          width: 100%;
-          height: auto;
-        }
-        .card-list {
-          display: flex;
-          /* flex-wrap: wrap; */
-          justify-content: space-around
-        }
-        .card-list-item {
-          width: calc(33% - 20px * 2 / 2);
-          margin-left: 20px;
-          margin-top: 20px;
-          &:nth-child(-n+3) {
-            margin-top: 0;
-          }
-          &:nth-child(3n+1) {
-            margin-left: 0;
-          }
-        }
-        .card__textbox{
-          width: 100%;
-          height: auto;
-          padding: 20px 18px;
-          background: #ffffff;
-          box-sizing: border-box;
-        }
-        .card__textbox > * + *{
-          margin-top: 10px;
-        }
-        .card__titletext{
-          font-size: 20px;
-          font-weight: bold;
-          line-height: 125%;
-        }
-        .card__overviewtext{
-          font-size: 20px;
-          line-height: 125%;
-        }
-        .card-skin{
-          box-shadow: 2px 2px 6px rgba(0,0,0,.4);
-        }
-        .border{
-          border: 1px solid #00cc00;
-          text-align: center;
-        }
-        .input{
-          width:100%;
-          text-align: right;
-        }
-        .foot{
-          height:111px;
-        }
     </style>
 </head>
 
 <body id="">
         <div class="container">
-        <h3>面談予約フォーム</h3>
+        <h3 class="title">面談予約フォーム</h3>
         <div class="date-form">
           <div class="icon-left">
             <a href="?ym=<?php echo $prev; ?>">
@@ -360,6 +203,12 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
               <i class="fas fa-arrow-alt-circle-right fa-2x"></i>
             </a>
           </div>
+          <?php if(isset($member)):?>
+            <span><a href="logout.php" class="logout-button">ログアウト</a></span>
+            <span><a href="logout.php" class="list-button">予約リスト</a></span>
+          <?php else:?>
+            <span><a href="login.php" class="login-button">管理者ログイン</a></span>
+          <?php endif;?>
         </div>
         <table class="table table-bordered">
             <tr>
