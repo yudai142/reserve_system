@@ -9,8 +9,26 @@ if(isset($_SESSION["id"]) && $_SESSION["time"] + 3600 > time()){
   $members = $db->prepare("SELECT * FROM users WHERE id=?");
   $members->execute(array($_SESSION["id"]));
   $member = $members->fetch();
+  if(!$member){
+    header("Location: logout.php");
+  }
 }
 
+if(isset($_POST['name'])) {
+    //名前が送信されたら以下の処理を行う
+    //この部分は変更してもいい
+
+    //「予約フォーム」からの情報をそれぞれ変数に格納しておく↓
+  $name=htmlspecialchars($_POST["name"], ENT_QUOTES);
+  $time_number=htmlspecialchars($_POST["time_number"], ENT_QUOTES);
+  $day=htmlspecialchars($_POST["day"], ENT_QUOTES);
+          //「予約フォーム」からの情報をそれぞれ変数に格納しておく↑
+  $db->query("INSERT INTO reservation (name,time_number,day)
+              VALUES ('$name','$time_number','$day')");
+  header("Location: " . $_SERVER['PHP_SELF']);
+  // "reservation_form.php（予約フォームがあったページ）"に戻る
+  exit;
+}
 
 function getreservation(){
     
@@ -27,11 +45,7 @@ function getreservation(){
   
   foreach($ps as $out){
       $day_out = strtotime((string) $out['day']);
-  
-      $member_out = (string) $out['member'];
-      
-      $reservation_member[date('Y-m-d', $day_out)] = $member_out;
-          
+      $reservation_member[date('Y-m-d', $day_out)][$out['time_number']] = array($out['name'], $out['teacher_name']);
   }
       ksort($reservation_member);
       return $reservation_member;
@@ -46,7 +60,7 @@ function reservation($date,$reservation_array){
     if(array_key_exists($date,$reservation_array)){
         //もし"カレンダーの日付"と"予約された日"が一致すれば以下を実行する
         
-        if($reservation_array[$date] >= 10){
+        if(count($reservation_array[$date]) >= 2){
             //予約人数が１０人以上の場合は以下を実行する
             
         $reservation_member = "<br/>"."<span class='green'>"."予約できません"."</span>";
@@ -57,7 +71,7 @@ function reservation($date,$reservation_array){
         else{
             //予約人数が１０人より少なければ以下を実行する
             
-           $reservation_member = "<br/>"."<span class='green'>".$reservation_array[$date]."人"."</span>";
+           $reservation_member = "<br/>"."<span class='green'>".count($reservation_array[$date])."人"."</span>";
             //例：echo $reservation_member; → ３人
             //色を変えるためにspanでclassをつけた
             
@@ -73,7 +87,8 @@ date_default_timezone_set('Asia/Tokyo');
 //前月・次月リンクが選択された場合は、GETパラメーターから年月を取得
 if(isset($_GET['ym'])){ 
     $ym = date("Y-m",strtotime($_GET['ym']));
-    $timestamp = strtotime($_GET['ym']);
+    $select_date = date('Y-m-d', strtotime($_GET['ym']));
+    $timestamp = strtotime($ym);
 }else{
     //今月の年月を表示
     $ym = date('Y-m');
@@ -84,6 +99,7 @@ if(isset($_GET['ym'])){
         //falseが返ってきた時は、現在の年月・タイムスタンプを取得
         $ym = date('Y-m');
         $timestamp = strtotime($ym . '-01');
+        $select_date = date('Y-m-d',$timestamp);
     }
 }
 
@@ -92,8 +108,6 @@ if(isset($_GET['ym'])){
 //今月の日付　フォーマット　例）2020-10-2
 $today = date('Y-m-d');
 
-//カレンダーのタイトルを作成　例）2020年10月
-$html_title = date('Y-m-d', $timestamp);//date(表示する内容,基準)
 
 //前月・次月の年月を取得
 //strtotime(,基準)
@@ -165,7 +179,6 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
     }
 }
 
-    
 ?>
 <!-----------カレンダープログラム--------------->
 
@@ -196,7 +209,7 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
             </a>
           </div>
           <label>
-            <input type="month" id="month" value="<?php echo date("Y-m",strtotime($html_title)) ?>" />
+            <input type="month" id="month" value="<?php echo $ym ?>" />
           </label>
           <div class="icon-right">
             <a href="?ym=<?php echo $next; ?>">
@@ -205,7 +218,7 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
           </div>
           <?php if(isset($member)):?>
             <span><a href="logout.php" class="logout-button">ログアウト</a></span>
-            <span><a href="logout.php" class="list-button">予約リスト</a></span>
+            <span><a href="list.php" class="list-button">予約リスト</a></span>
           <?php else:?>
             <span><a href="login.php" class="login-button">管理者ログイン</a></span>
           <?php endif;?>
@@ -234,33 +247,64 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
         <div class="card-list-item">
           <div class="card card-skin">
             <div class="card__textbox border">
-            <div class="card__titletext"><?php echo date("Y-m-d",strtotime($html_title)) ?>　15:00〜15:30</div>
+            <div class="card__titletext"><?php echo $select_date ?>　15:00〜15:30</div>
             </div>
-            <div class="card__textbox input foot">
-              <div class="card__titletext">
-                受講者：<span><input type="text"></span>
+            <?php if(isset($reservation_array[$select_date][1])):?>
+              <div class="card__textbox foot">
+                <div class="card__titletext">
+                  受講者：<?php echo $reservation_array[$select_date][1][0]?>
+                  <span></span>
+                </div>
+                <div class="card__overviewtext">
+                  担当者：<?php echo $reservation_array[$select_date][1][1]?>
+                </div>
               </div>
-              <div class="card__overviewtext">
-                  <input type="submit" value="予約する">
+              <?php else:?>
+              <div class="card__textbox input foot">
+                <form action="" method="post">
+                  <div class="card__titletext">
+                    受講者：<span><input type="text" name="name"></span>
+                  </div>
+                  <div class="card__overviewtext">
+                    <input name="time_number" type="hidden" value="1">
+                    <input name="day" type="hidden" value="<?php echo $select_date ?>">
+                    <input type="submit" value="予約する">
+                  </div>
+                </form>
               </div>
-            </div>
+              <?php endif;?>
           </div>
         </div>
 
         <div class="card-list-item">
           <div class="card card-skin">
             <div class="card__textbox border">
-            <div class="card__titletext"><?php echo date("Y-m-d",strtotime($html_title)) ?>　15:30〜16:00</div>
+            <div class="card__titletext"><?php echo $select_date ?>　15:30〜16:00</div>
             </div>
-            <div class="card__textbox foot">
-              <div class="card__titletext">
-                受講者：
-                <span></span>
+              <?php if(isset($reservation_array[$select_date][2])):?>
+              <div class="card__textbox foot">
+                <div class="card__titletext">
+                  受講者：<?php echo $reservation_array[$select_date][2][0]?>
+                  <span></span>
+                </div>
+                <div class="card__overviewtext">
+                  担当者：<?php echo $reservation_array[$select_date][2][1]?>
+                </div>
               </div>
-              <div class="card__overviewtext">
-                担当者：
+              <?php else:?>
+              <div class="card__textbox input foot">
+                <form action="" method="post">
+                  <div class="card__titletext">
+                    受講者：<span><input type="text" name="name"></span>
+                  </div>
+                  <div class="card__overviewtext">
+                    <input name="time_number" type="hidden" value="1">
+                    <input name="day" type="hidden" value="<?php echo $select_date ?>">
+                    <input type="submit" value="予約する">
+                  </div>
+                </form>
               </div>
-            </div>
+              <?php endif;?>
           </div>
         </div>
       </div>
