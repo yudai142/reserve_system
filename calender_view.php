@@ -247,7 +247,7 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
         <div class="card-list-item">
           <div class="card card-skin">
             <div class="card__textbox border">
-            <div class="card__titletext"><?php echo $select_date ?>　15:00〜15:30</div>
+            <div class="card__titletext"><?php echo $select_date ?>　15:00〜15:20</div>
             </div>
             <?php if(isset($reservation_array[$select_date][1])):?>
               <div class="card__textbox foot">
@@ -279,7 +279,7 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
         <div class="card-list-item">
           <div class="card card-skin">
             <div class="card__textbox border">
-            <div class="card__titletext"><?php echo $select_date ?>　15:30〜16:00</div>
+            <div class="card__titletext"><?php echo $select_date ?>　15:30〜15:50</div>
             </div>
               <?php if(isset($reservation_array[$select_date][2])):?>
               <div class="card__textbox foot">

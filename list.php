@@ -15,57 +15,6 @@ if(isset($_SESSION["id"]) && $_SESSION["time"] + 3600 > time()){
   header("Location: logout.php");
 }
 
-function getreservation(){
-    
-  $dsn="mysql:host=localhost;port=8889;dbname=reservation_calender;charset=utf8";
-  $user="root";
-  $pass="root";
-  try{
-  $db = new PDO($dsn,$user,$pass);
-  $ps = $db->query("SELECT * FROM reservation");
-  }catch (Exception $e) {
-    echo $e->getMessage() . PHP_EOL;
-  }
-  $reservation_member = array();
-  
-  foreach($ps as $out){
-      $day_out = strtotime((string) $out['day']);
-      $reservation_member[date('Y-m-d', $day_out)][$out['time_number']] = array($out['name'], $out['teacher_name']);
-  }
-      ksort($reservation_member);
-      return $reservation_member;
-}
-
-$reservation_array = getreservation();
-//getreservation関数を$reservation_arrayに代入しておく
-
-function reservation($date,$reservation_array){
-    //カレンダーの日付と予約された日付を照合する関数
-    
-    if(array_key_exists($date,$reservation_array)){
-        //もし"カレンダーの日付"と"予約された日"が一致すれば以下を実行する
-        
-        if(count($reservation_array[$date]) >= 2){
-            //予約人数が１０人以上の場合は以下を実行する
-            
-        $reservation_member = "<br/>"."<span class='green'>"."予約できません"."</span>";
-        return $reservation_member;
-            
-    }
-        
-        else{
-            //予約人数が１０人より少なければ以下を実行する
-            
-           $reservation_member = "<br/>"."<span class='green'>".count($reservation_array[$date])."人"."</span>";
-            //例：echo $reservation_member; → ３人
-            //色を変えるためにspanでclassをつけた
-            
-        return $reservation_member; 
-            
-        }
-    }
-}
-
 //タイムゾーンを設定
 date_default_timezone_set('Asia/Tokyo');
 
@@ -87,6 +36,60 @@ if(isset($_GET['ym'])){
         $select_date = date('Y-m-d',$timestamp);
     }
 }
+
+
+function getreservation($ym){
+    
+  $dsn="mysql:host=localhost;port=8889;dbname=reservation_calender;charset=utf8";
+  $user="root";
+  $pass="root";
+  try{
+  $db = new PDO($dsn,$user,$pass);
+  $ps = $db->prepare("SELECT * FROM reservation WHERE day like ?");
+  $ps->execute(['%'.$ym.'%']);
+  }catch (Exception $e) {
+    echo $e->getMessage() . PHP_EOL;
+  }
+  $reservation_member = array();
+  
+  foreach($ps as $out){
+      $day_out = strtotime((string) $out['day']);
+      $reservation_member[date('Y-m-d', $day_out)][$out['time_number']] = array($out['name'], $out['teacher_name']);
+  }
+      ksort($reservation_member);
+      return $reservation_member;
+}
+
+$reservation_array = getreservation($ym);
+//getreservation関数を$reservation_arrayに代入しておく
+
+function reservation($date,$reservation_array){
+    //カレンダーの日付と予約された日付を照合する関数
+    
+    if(array_key_exists($date,$reservation_array)){
+        //もし"カレンダーの日付"と"予約された日"が一致すれば以下を実行する
+        
+        if(count($reservation_array[$date]) >= 2){
+            //予約人数が１０人以上の場合は以下を実行する
+            
+        $reservation_member = "<br/>"."<span class='green'>"."予約できません"."</span>";
+        return $reservation_member;
+            
+    }
+        
+        else{
+            //予約人数が１０人より少なければ以下を実行する
+            
+          $reservation_member = "<br/>"."<span class='green'>".count($reservation_array[$date])."人"."</span>";
+            //例：echo $reservation_member; → ３人
+            //色を変えるためにspanでclassをつけた
+            
+        return $reservation_member; 
+            
+        }
+    }
+}
+
 
 
 
@@ -204,6 +207,7 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
       <?php endif;?>
     </div>
   </div>
+  <?php var_dump($reservation_array); ?>
 </body>
 <script type="text/javascript">
   let url = new URL(window.location.href);
