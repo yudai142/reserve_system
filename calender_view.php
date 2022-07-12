@@ -25,7 +25,7 @@ if(isset($_POST['name'])) {
           //「予約フォーム」からの情報をそれぞれ変数に格納しておく↑
   $db->query("INSERT INTO reservation (name,time_number,day)
               VALUES ('$name','$time_number','$day')");
-  header("Location: " . $_SERVER['PHP_SELF']);
+  header("Location: " . "?ym={$_REQUEST['ym']}");
   // "reservation_form.php（予約フォームがあったページ）"に戻る
   exit;
 }
@@ -263,7 +263,7 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
               <div class="card__textbox input foot">
                 <form action="" method="post">
                   <div class="card__titletext">
-                    受講者：<span><input type="text" name="name"></span>
+                    受講者：<span><input type="text" name="name" required></span>
                   </div>
                   <div class="card__overviewtext">
                     <input name="time_number" type="hidden" value="1">
@@ -295,10 +295,10 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
               <div class="card__textbox input foot">
                 <form action="" method="post">
                   <div class="card__titletext">
-                    受講者：<span><input type="text" name="name"></span>
+                    受講者：<span><input type="text" name="name" required></span>
                   </div>
                   <div class="card__overviewtext">
-                    <input name="time_number" type="hidden" value="1">
+                    <input name="time_number" type="hidden" value="2">
                     <input name="day" type="hidden" value="<?php echo $select_date ?>">
                     <input type="submit" value="予約する">
                   </div>
