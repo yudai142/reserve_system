@@ -217,10 +217,10 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
             </a>
           </div>
           <?php if(isset($member)):?>
-            <span><a href="logout.php" class="logout-button">ログアウト</a></span>
-            <span><a href="list.php" class="list-button">予約リスト</a></span>
+            <span><a href="logout.php" class="logout-button red-button">ログアウト</a></span>
+            <span><a href="list.php" class="list-button gray-button">予約リスト</a></span>
           <?php else:?>
-            <span><a href="login.php" class="login-button">管理者ログイン</a></span>
+            <span><a href="login.php" class="login-button blue-button">管理者ログイン</a></span>
           <?php endif;?>
         </div>
         <table class="table table-bordered">

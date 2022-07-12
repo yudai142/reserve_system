@@ -1,11 +1,36 @@
-* css reset */
-@charset "utf-8";
-html, body, div, span, iframe,
-h1, h2, h3, h4, h5, h6, p, img, a,
-ol, ul, li,
-form, label,
-table, tbody, tfoot, thead, tr, th, td,
-article,footer, header, menu, nav, section {
+* css reset */ @charset "utf-8";
+html,
+body,
+div,
+span,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+img,
+a,
+ol,
+ul,
+li,
+form,
+label,
+table,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+footer,
+header,
+menu,
+nav,
+section {
   margin: 0;
   padding: 0;
   border: 0;
@@ -14,54 +39,71 @@ article,footer, header, menu, nav, section {
   text-decoration: none;
   vertical-align: baseline;
 }
+
+
 /* 共通CSS */
+
 .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 15px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 15px;
 }
+
 html {
-    min-height: 100%;
-    position: relative;
+  min-height: 100%;
+  position: relative;
 }
+
 a {
   text-decoration: none;
 }
+
 h3 {
-    margin-bottom: 30px;
-    text-align: center;
+  margin-bottom: 30px;
+  text-align: center;
 }
+
 th {
-    height: 30px;
-    text-align: center;
+  height: 30px;
+  text-align: center;
 }
+
 td {
-    height: 100px;
-    width: 100px;
+  height: 100px;
+  width: 100px;
 }
-th:nth-of-type(1), td:nth-of-type(1) {
-    color: red;
+
+th:nth-of-type(1),
+td:nth-of-type(1) {
+  color: red;
 }
-th:nth-of-type(7), td:nth-of-type(7) {
-    color: blue;
+
+th:nth-of-type(7),
+td:nth-of-type(7) {
+  color: blue;
 }
+
 a:hover {
   text-decoration: none;
 }
-table td a{
-    color : inherit;
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    height: 100%;
-} 
+
+table td a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 label {
   position: relative;
   width: 192px;
 }
+
 input[type="text"] {
-  max-width:215px;
+  max-width: 215px;
 }
+
 input[type="month"] {
   padding: 0 10px;
   width: 147px;
@@ -71,9 +113,11 @@ input[type="month"] {
   box-sizing: border-box;
   font-size: 23px;
 }
+
 input[type="month"]:focus {
   outline: 0;
 }
+
 label::before {
   position: absolute;
   content: "";
@@ -83,18 +127,24 @@ label::before {
   height: 36px;
   background-color: #06c;
   background-image: url("icon_calendar.png");
-  background-repeat:  no-repeat;                         /* 画像の繰り返しを指定  */              
-  background-position:center center;                     /* 画像の表示位置を指定  */
-  background-size:contain;                               /* 画像のサイズを指定    */
+  background-repeat: no-repeat;
+  /* 画像の繰り返しを指定  */
+  background-position: center center;
+  /* 画像の表示位置を指定  */
+  background-size: contain;
+  /* 画像のサイズを指定    */
   border-radius: 10px;
 }
-input[type="month"]::-webkit-inner-spin-button{
+
+input[type="month"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
-input[type="month"]::-webkit-clear-button{
+
+input[type="month"]::-webkit-clear-button {
   -webkit-appearance: none;
 }
-input[type="month"]::-webkit-calendar-picker-indicator{
+
+input[type="month"]::-webkit-calendar-picker-indicator {
   position: absolute;
   right: 10px;
   top: 0px;
@@ -106,125 +156,158 @@ input[type="month"]::-webkit-calendar-picker-indicator{
   color: transparent;
   cursor: pointer;
 }
+
 .today {
-    background: orange;
+  background: orange;
 }
-.holiday{
-    color: red;
+
+.holiday {
+  color: red;
 }
-.green{
-    color: green;
+
+.green {
+  color: green;
 }
+
 .wrapper {
-    padding: 80px 0;
-    margin-bottom: 80px;
+  padding: 80px 0;
+  margin-bottom: 80px;
 }
+
 .wrapper-title {
-    margin-bottom: 30px;
-    border-bottom: 1px solid #a2aab0;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #a2aab0;
 }
-.wrapper-title h3{
-    font-size: 25px;
-    color: #3e3e3b;
+
+.wrapper-title h3 {
+  font-size: 25px;
+  color: #3e3e3b;
 }
+
 .wrapper-title p {
-    font-size: 13px;
-    color: #a2aab0;
+  font-size: 13px;
+  color: #a2aab0;
 }
+
 .btn {
-    padding: 10px 30px;
-    font-size: 15px;
-    border-radius: 20px;
-    border: none;
-    margin-top: 20px;
-    display: inline-block;
+  padding: 10px 30px;
+  font-size: 15px;
+  border-radius: 20px;
+  border: none;
+  margin-top: 20px;
+  display: inline-block;
 }
-.btn:hover{
-    cursor: pointer;
-    opacity: .8;
+
+.btn:hover {
+  cursor: pointer;
+  opacity: .8;
 }
+
 .btn-submit {
-    background-color: #4c586f;
-    color: #fff;
+  background-color: #4c586f;
+  color: #fff;
 }
+
+
 /* login */
+
 .login-wrapper {
-    text-align: center;
-    padding: 80px 0 ;
+  text-align: center;
+  padding: 80px 0;
 }
+
 .login-wrapper-title {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
-.login-wrapper-title h3{
-    font-size: 25px;
-    color: #3e3e3b;
+
+.login-wrapper-title h3 {
+  font-size: 25px;
+  color: #3e3e3b;
 }
+
 .login-wrapper-title p {
-    font-size: 13px;
-    color: #a2aab0;
+  font-size: 13px;
+  color: #a2aab0;
 }
+
 .login {
-    padding: 50px 0; 
-    width: 50%;
-    margin: 0 auto;
-    background-color: #ebeced;
+  padding: 50px 0;
+  width: 50%;
+  margin: 0 auto;
+  background-color: #ebeced;
 }
+
 .login-form {
-    width: 70%;
-    margin: 0 auto;
+  width: 70%;
+  margin: 0 auto;
 }
+
 .login-form input {
-    border: none;
-    width: 100%;
-    height: 25px;
+  border: none;
+  width: 100%;
+  height: 25px;
 }
+
 .login-form p {
-    text-align: left;
+  text-align: left;
 }
+
 .form-group {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
+
 .container {
   font-family: 'Noto Sans', sans-serif;
-    margin-top: 40px;
+  margin-top: 40px;
 }
-.date-form{
+
+.date-form {
   position: relative;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
-  justify-content:center;
+  justify-content: center;
 }
-.footer{
+
+.footer {
   margin-bottom: 40px;
 }
-.icon-left{
+
+.icon-left {
   margin-right: 30px;
 }
-.icon-left a{
+
+.icon-left a {
   color: #06c;
 }
-.icon-left a:hover{
+
+.icon-left a:hover {
   color: #337ab7;
 }
-.icon-right{
+
+.icon-right {
   margin-left: 30px;
 }
-.icon-right a{
+
+.icon-right a {
   color: #06c;
 }
-.icon-right a:hover{
+
+.icon-right a:hover {
   color: #337ab7;
 }
-.card{
+
+.card {
   width: 100%;
   height: auto;
 }
+
 .card-list {
   display: flex;
   /* flex-wrap: wrap; */
   justify-content: space-around
 }
+
 .card-list-item {
   width: calc(33% - 20px * 2 / 2);
   margin-left: 20px;
@@ -236,43 +319,53 @@ input[type="month"]::-webkit-calendar-picker-indicator{
     margin-left: 0;
   }
 }
-.card__textbox{
+
+.card__textbox {
   width: 100%;
   height: auto;
   padding: 20px 18px;
   background: #ffffff;
   box-sizing: border-box;
 }
-.card__textbox > * + *{
+
+.card__textbox>*+* {
   margin-top: 10px;
 }
-.card__titletext{
+
+.card__titletext {
   font-size: 20px;
   font-weight: bold;
   line-height: 125%;
 }
-.card__overviewtext{
+
+.card__overviewtext {
   font-size: 20px;
   line-height: 125%;
 }
-.card-skin{
-  box-shadow: 2px 2px 6px rgba(0,0,0,.4);
+
+.card-skin {
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, .4);
 }
-.border{
+
+.border {
   border: 1px solid #00cc00;
   text-align: center;
 }
-.input{
-  width:100%;
+
+.input {
+  width: 100%;
   text-align: right;
 }
-.foot{
-  height:111px;
+
+.foot {
+  height: 111px;
 }
-.title{
+
+.title {
   position: relative;
 }
-.login-button{
+
+.blue-button {
   align-items: center;
   background-color: #0A66C2;
   border: 0;
@@ -298,15 +391,14 @@ input[type="month"]::-webkit-calendar-picker-indicator{
   user-select: none;
   -webkit-user-select: none;
   vertical-align: middle;
-  position: absolute;
-  top: -5px;
-  right: 0;
 }
-.login-button:hover{
+
+.blue-button:hover {
   color: #ffffff;
   background-color: #16437E;
 }
-.logout-button{
+
+.red-button {
   align-items: center;
   background-color: #e74c3c;
   border: 0;
@@ -332,15 +424,14 @@ input[type="month"]::-webkit-calendar-picker-indicator{
   user-select: none;
   -webkit-user-select: none;
   vertical-align: middle;
-  position: absolute;
-  top: -5px;
-  right: 0;
 }
-.logout-button:hover{
+
+.red-button:hover {
   color: #ffffff;
   background-color: #ff5341;
 }
-.list-button{
+
+.gray-button {
   align-items: center;
   background-color: #4c586f;
   border: 0;
@@ -366,45 +457,230 @@ input[type="month"]::-webkit-calendar-picker-indicator{
   user-select: none;
   -webkit-user-select: none;
   vertical-align: middle;
-  position: absolute;
-  top: -5px;
-  right: 130px;
 }
-.list-button:hover{
+
+.gray-button:hover {
   color: #ffffff;
   opacity: .8;
 }
-.top-button{
-  align-items: center;
-  background-color: #0A66C2;
-  border: 0;
-  border-radius: 100px;
-  box-sizing: border-box;
-  color: #ffffff;
-  cursor: pointer;
-  display: inline-flex;
-  font-family: -apple-system, system-ui, system-ui, "Segoe UI", Roboto, "Helvetica Neue", "Fira Sans", Ubuntu, Oxygen, "Oxygen Sans", Cantarell, "Droid Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Lucida Grande", Helvetica, Arial, sans-serif;
-  font-size: 16px;
-  justify-content: center;
-  line-height: 20px;
-  max-width: 480px;
-  min-height: 40px;
-  min-width: 0px;
-  overflow: hidden;
-  padding: 0px;
-  padding-left: 20px;
-  padding-right: 20px;
-  text-align: center;
-  touch-action: manipulation;
-  transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
-  user-select: none;
-  -webkit-user-select: none;
-  vertical-align: middle;
+
+.login-button {
+  position: absolute;
+  top: -5px;
+  right: 0;
+}
+
+.logout-button {
+  position: absolute;
+  top: -5px;
+  right: 0;
+}
+
+.list-button {
   position: absolute;
   top: -5px;
   right: 130px;
 }
-.top-button:hover{
-  color: #ffffff;
-  background-color: #16437E;
+
+.top-button {
+  position: absolute;
+  top: -5px;
+  right: 130px;
+}
+
+
+/*//////////////////////////////////////////////////////////////////[ Table ]*/
+
+.limiter {
+  width: 100%;
+  margin: 0 auto
+}
+
+.container-table100 {
+  width: 100%;
+  /* min-height: 100vh; */
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 33px 30px
+}
+
+.wrap-table100 {
+  width: 1170px
+}
+
+table {
+  border-spacing: 1;
+  border-collapse: collapse;
+  /* background: #fff; */
+  background: #ececff;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 100%;
+  margin: 0 auto;
+  position: relative
+}
+
+table * {
+  position: relative
+}
+
+table td,
+table th {
+  padding-left: 8px
+}
+
+table thead tr {
+  height: 60px;
+  background: #6c7ae0
+}
+
+table tbody tr {
+  height: 50px
+}
+
+table tbody tr:last-child {
+  border: 0
+}
+
+table td,
+table th {
+  text-align: left
+}
+
+table td.l,
+table th.l {
+  text-align: right
+}
+
+table td.c,
+table th.c {
+  text-align: center
+}
+
+table td.r,
+table th.r {
+  text-align: center
+}
+
+.table100-head th {
+  font-family: OpenSans-Regular;
+  font-size: 18px;
+  color: #fff;
+  line-height: 1.2;
+  font-weight: unset
+}
+
+tbody tr:nth-child(even) {
+  background-color: #fff
+}
+
+tbody tr {
+  font-family: OpenSans-Regular;
+  font-size: 15px;
+  /* color: gray; */
+  line-height: 1.2;
+  font-weight: unset
+}
+
+
+/* tbody tr:hover {
+  color: #555;
+  background-color: #f5f5f5;
+  cursor: pointer
+} */
+
+.column1 {
+  width: 150px;
+  padding-left: 40px;
+  text-align: center;
+}
+
+td.column1 {
+  color: inherit;
+}
+
+.column2 {
+  width: 160px;
+  text-align: center;
+}
+
+.column3 {
+  width: 110px;
+  text-align: center;
+}
+
+.column4 {
+  width: 110px;
+  text-align: center;
+}
+
+.column5 {
+  width: 100px;
+  text-align: center;
+}
+
+.column6 {
+  width: 100px;
+  text-align: center;
+}
+
+@media screen and (max-width:992px) {
+  table {
+    display: block
+  }
+  table>*,
+  table tr,
+  table td,
+  table th {
+    display: block
+  }
+  table thead {
+    display: none
+  }
+  table tbody tr {
+    height: auto;
+    padding: 37px 0
+  }
+  table tbody tr td {
+    padding-left: 40%!important;
+    margin-bottom: 24px
+  }
+  table tbody tr td:last-child {
+    margin-bottom: 0
+  }
+  table tbody tr td:before {
+    font-family: OpenSans-Regular;
+    font-size: 14px;
+    color: #999;
+    line-height: 1.2;
+    font-weight: unset;
+    position: absolute;
+    width: 40%;
+    left: 30px;
+    top: 0
+  }
+  .column4,
+  .column5,
+  .column6,
+  .column1,
+  .column2,
+  .column3 {
+    width: 100%
+  }
+  tbody tr {
+    font-size: 14px
+  }
+}
+
+@media(max-width:576px) {
+  .container-table100 {
+    padding-left: 15px;
+    padding-right: 15px
+  }
 }

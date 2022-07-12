@@ -54,7 +54,12 @@ function getreservation($ym){
   
   foreach($ps as $out){
       $day_out = strtotime((string) $out['day']);
-      $reservation_member[date('Y-m-d', $day_out)][$out['time_number']] = array($out['name'], $out['teacher_name']);
+      if($out['time_number'] == 1){
+        $talk_time = "15:00〜15:20";
+      }elseif($out['time_number'] == 2){
+        $talk_time = "15:30〜15:50";
+      };
+      $reservation_member[date('Y-m-d', $day_out)][$talk_time] = array($out['name'], $out['teacher_name']);
   }
       ksort($reservation_member);
       return $reservation_member;
@@ -200,14 +205,51 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
         </a>
       </div>
       <?php if(isset($member)):?>
-        <span><a href="logout.php" class="logout-button">ログアウト</a></span>
-        <span><a href="calender_view.php" class="top-button">トップに戻る</a></span>
+        <span><a href="logout.php" class="logout-button red-button">ログアウト</a></span>
+        <span><a href="calender_view.php" class="top-button blue-button">トップに戻る</a></span>
       <?php else:?>
         <span><a href="login.php" class="login-button">管理者ログイン</a></span>
       <?php endif;?>
     </div>
   </div>
-  <?php var_dump($reservation_array); ?>
+      
+
+  <div class="limiter">
+<div class="container-table100">
+<div class="wrap-table100">
+<div class="table100">
+<table>
+<thead>
+<tr class="table100-head">
+<th class="column1">日付</th>
+<th class="column2">面談時刻</th>
+<th class="column3">利用者</th>
+<th class="column4">担当者</th>
+<th class="column5"></th>
+<th class="column6"></th>
+</tr>
+</thead>
+<tbody>
+<?php foreach($reservation_array as $reservation_date => $values): ?>
+    <?php foreach($values as $reservation_time => $name_value): ?>
+      <tr>
+      <form action="" method="post">
+        <td class="column1"><?php echo $reservation_date; ?></td>
+        <td class="column2"><?php echo $reservation_time;?></td>
+        <td class="column3"><input type="text" name="name" value="<?php echo $name_value[0]; ?>"></td>
+        <td class="column4"><input type="text" name="teacher_name" value="<?php echo $name_value[1]; ?>"></td>
+        <td class="column5"><input type="submit" class="blue-button" value="変更する"></td>
+        <td class="column6"><input type="submit" class="red-button" value="削除する"></td>
+      </form>
+      </tr>
+    <?php endforeach;?>
+  <?php endforeach;?>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
 </body>
 <script type="text/javascript">
   let url = new URL(window.location.href);
