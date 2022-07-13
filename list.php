@@ -217,7 +217,7 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
   <div class="limiter">
 <div class="container-table100">
 <div class="wrap-table100">
-<div class="table100">
+<div class="table100 table-bordered">
 <table>
 <thead>
 <tr class="table100-head">

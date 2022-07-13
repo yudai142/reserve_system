@@ -511,7 +511,11 @@ input[type="month"]::-webkit-calendar-picker-indicator {
 }
 
 .wrap-table100 {
-  width: 1170px
+  width: 1170px;
+}
+
+.table-bordered {
+  border-radius: 10px;
 }
 
 table {
@@ -597,7 +601,6 @@ tbody tr {
 
 .column1 {
   width: 150px;
-  padding-left: 40px;
   text-align: center;
 }
 
