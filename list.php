@@ -14,7 +14,13 @@ if(isset($_SESSION["id"]) && $_SESSION["time"] + 3600 > time()){
 }else{
   header("Location: logout.php");
 }
-
+if(isset($_POST["id"]) && isset($_POST["name"]) || isset($_POST["teacher_name"])){
+  $members = $db->prepare("SELECT * FROM reservation WHERE id=?");
+  $members->execute(array($_POST["id"]));
+  $member = $members->fetch();
+  $statement = $db->prepare('UPDATE reservation SET name=?, teacher_name=? WHERE id=?');
+  $statement->execute(array($_POST["name"],$_POST["teacher_name"], $_POST['id']));
+}
 //タイムゾーンを設定
 date_default_timezone_set('Asia/Tokyo');
 
@@ -59,7 +65,7 @@ function getreservation($ym){
       }elseif($out['time_number'] == 2){
         $talk_time = "15:30〜15:50";
       };
-      $reservation_member[date('Y-m-d', $day_out)][$talk_time] = array($out['name'], $out['teacher_name']);
+      $reservation_member[date('Y-m-d', $day_out)][$talk_time] = array($out['name'], $out['teacher_name'], $out['id']);
   }
       ksort($reservation_member);
       return $reservation_member;
@@ -223,8 +229,7 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
 <tr class="table100-head">
 <th class="column1">日付</th>
 <th class="column2">面談時刻</th>
-<th class="column3">利用者</th>
-<th class="column4">担当者</th>
+<th class="column3">利用者/担当者</th>
 <th class="column5"></th>
 <th class="column6"></th>
 </tr>
@@ -233,14 +238,17 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
 <?php foreach($reservation_array as $reservation_date => $values): ?>
     <?php foreach($values as $reservation_time => $name_value): ?>
       <tr>
-      <form action="" method="post">
         <td class="column1"><?php echo $reservation_date; ?></td>
         <td class="column2"><?php echo $reservation_time;?></td>
-        <td class="column3"><input type="text" name="name" value="<?php echo $name_value[0]; ?>"></td>
-        <td class="column4"><input type="text" name="teacher_name" value="<?php echo $name_value[1]; ?>"></td>
-        <td class="column5"><input type="submit" class="blue-button" value="変更する"></td>
+        <td class="column3">
+        <form id="form_<?php echo $name_value[2]; ?>" action="" method="post">
+          利用者：<input type="text" name="name" value="<?php echo $name_value[0]; ?>"><br>
+          担当者：<input type="text" name="teacher_name" value="<?php echo $name_value[1]; ?>">
+          <input type="hidden" name="id" value="<?php echo $name_value[2]; ?>">
+        </form>
+        </td>
+        <td class="column5"><input type="submit" class="blue-button" value="変更する" form="form_<?php echo $name_value[2]; ?>"></td>
         <td class="column6"><input type="submit" class="red-button" value="削除する"></td>
-      </form>
       </tr>
     <?php endforeach;?>
   <?php endforeach;?>
