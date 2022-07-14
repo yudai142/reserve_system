@@ -224,7 +224,8 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
           <?php endif;?>
         </div>
         <table class="table table-bordered">
-            <tr>
+          <thead>
+          <tr class="table10-head">
                 <th>日</th>
                 <th>月</th>
                 <th>火</th>
@@ -233,11 +234,14 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
                 <th>金</th>
                 <th>土</th>
             </tr>
+          </thead>
+          <tbody>
             <?php
                 foreach ($weeks as $week) {
                     echo $week;
                 }
             ?>
+          </tbody>
         </table>
     </div>
     

@@ -83,6 +83,10 @@ td:nth-of-type(7) {
   color: blue;
 }
 
+th:nth-of-type(n+2):nth-of-type(-n+6) {
+  color: #ebeced
+}
+
 a:hover {
   text-decoration: none;
 }
@@ -540,8 +544,11 @@ table th {
 }
 
 table thead tr {
-  height: 60px;
   background: #6c7ae0
+}
+
+table thead tr.table100-head {
+  height: 60px;
 }
 
 table tbody tr {
