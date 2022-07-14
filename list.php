@@ -21,6 +21,18 @@ if(isset($_POST["id"]) && isset($_POST["name"]) || isset($_POST["teacher_name"])
   $statement = $db->prepare('UPDATE reservation SET name=?, teacher_name=? WHERE id=?');
   $statement->execute(array($_POST["name"],$_POST["teacher_name"], $_POST['id']));
 }
+
+
+// 商品の削除処理
+if ($_REQUEST["sql_kind"] === "delete" && is_numeric($_REQUEST['reservation_id'])) {
+  $id = $_REQUEST['reservation_id'];
+  $statement = $db->prepare('DELETE FROM reservation WHERE id=?');
+  if($statement->execute(array($id))){
+    // $_SESSION['message'] = '予約情報を削除しました。';
+  }else{
+    // $_SESSION['message'] = '予約情報の削除処理が失敗しました。';
+  }
+}
 //タイムゾーンを設定
 date_default_timezone_set('Asia/Tokyo');
 
@@ -248,7 +260,13 @@ for($day = 1; $day <= $day_count; $day++, $youbi++){
         </form>
         </td>
         <td class="column5"><input type="submit" class="blue-button" value="変更する" form="form_<?php echo $name_value[2]; ?>"></td>
-        <td class="column6"><input type="submit" class="red-button" value="削除する"></td>
+        <td class="column6">
+          <form action="" method="post">
+            <input type="submit" class="red-button" value="削除する" onclick="return confirm('本当に削除しますか?')">
+            <input type="hidden" name="reservation_id" value="<?php echo $name_value[2] ?>">
+            <input type="hidden" name="sql_kind" value="delete">
+          </form>
+        </td>
       </tr>
     <?php endforeach;?>
   <?php endforeach;?>
