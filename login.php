@@ -18,7 +18,7 @@ if(!empty($_POST)) {
       if($_POST['save'] === 'on') {
         setcookie('email', $_POST['email'], time()+360*86400);
       }
-      header("Location: calender_view.php");
+      header("Location: index.php");
       exit;
     }else{
       $error['login'] = 'failed';
@@ -78,7 +78,7 @@ if(!empty($_POST)) {
                         <input type="password" name="password" size="35" maxlength="255" value="<?php print htmlspecialchars($_POST['password'], ENT_QUOTES); ?>" required />
                     </div>
                     <button type="submit" class="btn btn-submit">ログイン</button>
-                    <a href="calender_view.php" type="button" class="btn btn-submit">戻る</a>
+                    <a href="index.php" type="button" class="btn btn-submit">戻る</a>
                 </form>
             </div>
         </div>

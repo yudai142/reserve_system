@@ -19,5 +19,5 @@ if (ini_get("session.use_cookies")) {
 // 最終的に、セッションを破壊する
 session_destroy();
 
-header("Location: ./calender_view.php");
+header("Location: ./index.php");
 ?>
