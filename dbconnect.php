@@ -4,6 +4,7 @@ $filename = './env.php';
 if (!file_exists($filename)){
   //For Heroku
   $url = parse_url(getenv("DATABASE_URL"));
+  var_dump($url);
   try {
     $db = new PDO("pgsql:" . sprintf(
       "host=%s;port=%s;user=%s;password=%s;dbname=%s",
