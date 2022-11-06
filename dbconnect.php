@@ -13,7 +13,14 @@ if (!file_exists($filename)){
       $url["pass"],
       ltrim($url["path"], "/")
     ));
-    var_dump($db);
+    var_dump("pgsql:" . sprintf(
+      "host=%s;port=%s;user=%s;password=%s;dbname=%s",
+      $url["host"],
+      $url["port"],
+      $url["user"],
+      $url["pass"],
+      ltrim($url["path"], "/")
+    ));
   } catch(PDOException $e) {
       print('DB接続エラー：' . $e->getMessage());
   }
