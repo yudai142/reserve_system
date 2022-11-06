@@ -9,7 +9,7 @@ if (!file_exists($filename)){
   $user = $url["user"];
   $pass = $url["pass"];
   $dbc = substr($url["path"], 1);
-  $dsn = 'pgsql:host=' . $host . ';dbname=' . $dbc . ';charset=NULL';
+  $dsn = 'pgsql:host=' . $host . ';dbname=' . $dbc;
 
   try {
     $db = new PDO($dsn, $user, $pass, [
