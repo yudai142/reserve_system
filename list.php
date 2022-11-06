@@ -46,15 +46,10 @@ if(isset($_GET['ym'])){
 }
 
 
-function getreservation($ym){
-    
-  $dsn="mysql:host=localhost;port=8889;dbname=reservation_calender;charset=utf8";
-  $user="root";
-  $pass="root";
+function getreservation($ym, $db){
   try{
-  $db = new PDO($dsn,$user,$pass);
-  $ps = $db->prepare("SELECT * FROM reservation WHERE day like ?");
-  $ps->execute(['%'.$ym.'%']);
+    $ps = $db->prepare("SELECT * FROM reservation WHERE day like ?");
+    $ps->execute(['%'.$ym.'%']);
   }catch (Exception $e) {
     echo $e->getMessage() . PHP_EOL;
   }
@@ -73,7 +68,7 @@ function getreservation($ym){
       return $reservation_member;
 }
 
-$reservation_array = getreservation($ym);
+$reservation_array = getreservation($ym, $db);
 //getreservation関数を$reservation_arrayに代入しておく
 
 function reservation($date,$reservation_array){
