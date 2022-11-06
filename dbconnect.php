@@ -3,21 +3,16 @@ $filename = './env.php';
 
 if (!file_exists($filename)){
   //For Heroku
-  $url = parse_url(getenv('CLEARDB_DATABASE_URL'));
-
-  $host = $url["host"];
-  $user = $url["user"];
-  $pass = $url["pass"];
-  $dbc = substr($url["path"], 1);
-  $dsn = 'pgsql:host=' . $host . ';dbname=' . $dbc;
-
+  $url = parse_url(getenv("DATABASE_URL"));
   try {
-    $db = new PDO($dsn, $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
-      ]
-    );
+    $db = new PDO("pgsql:" . sprintf(
+      "host=%s;port=%s;user=%s;password=%s;dbname=%s",
+      $url["host"],
+      $url["port"],
+      $url["user"],
+      $url["pass"],
+      ltrim($url["path"], "/")
+    ));
   } catch(PDOException $e) {
       print('DB接続エラー：' . $e->getMessage());
   }
