@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("DATABASE_URL")
+}
+
+model reservation {
+  id Int @default(autoincrement()) @id
+  name String @db.VarChar(11)
+  teacher_name String? @db.VarChar(15)
+  time_number Int
+  day DateTime
+}
+
+model users {
+  id Int @default(autoincrement()) @id
+  name String @db.VarChar(11)
+  email String @unique
+  password String
+  created DateTime @default(now())
+  modfied DateTime? @updatedAt
+}
