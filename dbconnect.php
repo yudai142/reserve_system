@@ -13,6 +13,7 @@ if (!file_exists($filename)){
       $url["pass"],
       ltrim($url["path"], "/")
     ));
+    var_dump($db);
   } catch(PDOException $e) {
       print('DB接続エラー：' . $e->getMessage());
   }
