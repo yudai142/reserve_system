@@ -5,22 +5,11 @@ if (!file_exists($filename)){
   //For Heroku
   $url = parse_url(getenv("DATABASE_URL"));
   try {
-    $db = new PDO("pgsql:" . sprintf(
-      "host=%s;port=%s;user=%s;password=%s;dbname=%s",
-      $url["host"],
-      $url["port"],
-      $url["user"],
-      $url["pass"],
-      ltrim($url["path"], "/")
-    ));
-    var_dump("pgsql:" . sprintf(
-      "host=%s;port=%s;user=%s;password=%s;dbname=%s",
-      $url["host"],
-      $url["port"],
-      $url["user"],
-      $url["pass"],
-      ltrim($url["path"], "/")
-    ));
+    
+  $url = parse_url(getenv('DATABASE_URL'));
+  $dsn = sprintf('pgsql:host=%s;dbname=%s', $url['host'], substr($url['path'], 1));
+  $db = new PDO($dsn, $url['user'], $url['pass']);
+  var_dump($db->getAttribute(PDO::ATTR_SERVER_VERSION));
   } catch(PDOException $e) {
       print('DB接続エラー：' . $e->getMessage());
   }
