@@ -1,15 +1,11 @@
 <?php
-$filename = './env.php';
-
-if (!file_exists($filename)){
+if (!file_exists('./env.php')){
   //For Heroku
-  $url = parse_url(getenv("DATABASE_URL"));
   try {
-    
-  $url = parse_url(getenv('DATABASE_URL'));
-  $dsn = sprintf('pgsql:host=%s;dbname=%s', $url['host'], substr($url['path'], 1));
-  $db = new PDO($dsn, $url['user'], $url['pass']);
-  var_dump($db->getAttribute(PDO::ATTR_SERVER_VERSION));
+    $url = parse_url(getenv('DATABASE_URL'));
+    $dsn = sprintf('pgsql:host=%s;dbname=%s', $url['host'], substr($url['path'], 1));
+    $db = new PDO($dsn, $url['user'], $url['pass']);
+    var_dump($db->getAttribute(PDO::ATTR_SERVER_VERSION));
   } catch(PDOException $e) {
       print('DB接続エラー：' . $e->getMessage());
   }
