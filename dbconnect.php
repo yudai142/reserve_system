@@ -6,7 +6,10 @@ if (!file_exists($filename)){
   try {
     $url = parse_url(getenv('DATABASE_URL'));
     $dsn = sprintf('pgsql:host=%s;dbname=%s', $url['host'], substr($url['path'], 1));
-    $db = new PDO($dsn, $url['user'], $url['pass']);
+    $db = new PDO($dsn, $url['user'], $url['pass'], [
+      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+      PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ]);
   } catch(PDOException $e) {
       print('DB接続エラー：' . $e->getMessage());
   }
