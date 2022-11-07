@@ -30,17 +30,8 @@ if(isset($_POST['name'])) {
   exit;
 }
 
-function getreservation(){
-    
-  $dsn="mysql:host=localhost;port=8889;dbname=reservation_calender;charset=utf8";
-  $user="root";
-  $pass="root";
-  try{
-  $db = new PDO($dsn,$user,$pass);
+function getreservation($db){
   $ps = $db->query("SELECT * FROM reservation");
-  }catch (Exception $e) {
-    echo $e->getMessage() . PHP_EOL;
-  }
   $reservation_member = array();
   
   foreach($ps as $out){
@@ -51,7 +42,7 @@ function getreservation(){
       return $reservation_member;
 }
 
-$reservation_array = getreservation();
+$reservation_array = getreservation($db);
 //getreservation関数を$reservation_arrayに代入しておく
 
 function reservation($date,$reservation_array){
