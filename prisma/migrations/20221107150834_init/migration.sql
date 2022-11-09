@@ -4,7 +4,7 @@ CREATE TABLE "reservation" (
     "name" VARCHAR(11) NOT NULL,
     "teacher_name" VARCHAR(15),
     "time_number" INTEGER NOT NULL,
-    "day" TIMESTAMP(3) NOT NULL,
+    "day" date NOT NULL,
 
     CONSTRAINT "reservation_pkey" PRIMARY KEY ("id")
 );

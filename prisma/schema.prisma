@@ -16,7 +16,7 @@ model reservation {
   name String @db.VarChar(11)
   teacher_name String? @db.VarChar(15)
   time_number Int
-  day DateTime
+  day DateTime @db.Date()
 }
 
 model users {
